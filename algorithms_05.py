@@ -114,7 +114,67 @@ main_array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25]
 # створення індексованщї таблиці з кроком 4
 index_table = create_index_table(main_array, 4)
 
+# інтерполяційний пошук
+def interpolation_search(arr, x):
+    low = 0
+    high = len(arr) - 1
 
+    while low <= high and x >= arr[low] and x <= arr[high]:
+        index = low + int(((float(high - low) / (arr[high] - arr[low])) * (x - arr[low])))
+        if arr[index] == x:
+            return index
+        if arr[index] < x:
+            low = index + 1
+        else:
+            high = index - 1
+
+    return -1
+
+arr = [1, 3, 5, 7, 9, 11, 14, 16, 18, 20, 22, 25, 28, 30]
+index = interpolation_search(arr, 25) # 11
+print(arr[index])  # 25
+
+# Хеш функція
+class HashTable:
+    def __init__(self, size):
+        self.size = size
+        self.table = [[] for _ in range(self.size)]
+
+    def hash_function(self, key):
+        return hash(key) % self.size
+
+    def insert(self, key, value):
+        key_hash = self.hash_function(key)
+        key_value = [key, value]
+
+        if self.table[key_hash] is None:
+            self.table[key_hash] = list([key_value])
+            return True
+        else:
+            for pair in self.table[key_hash]:
+                if pair[0] == key:
+                    pair[1] = value
+                    return True
+            self.table[key_hash].append(key_value)
+            return True
+
+    def get(self, key):
+        key_hash = self.hash_function(key)
+        if self.table[key_hash] is not None:
+            for pair in self.table[key_hash]:
+                if pair[0] == key:
+                    return pair[1]
+        return None
+
+# Тестуємо нашу хеш-таблицю:
+H = HashTable(5)
+H.insert("apple", 10)
+H.insert("orange", 20)
+H.insert("banana", 30)
+
+print(H.get("apple"))   # Виведе: 10
+print(H.get("orange"))  # Виведе: 20
+print(H.get("banana"))  # Виведе: 30
 
 
 
